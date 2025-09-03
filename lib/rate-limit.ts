@@ -16,14 +16,14 @@ export const rateLimiters = {
 
     api: new Ratelimit({
         redis,
-        limiter: Ratelimit.slidingWindow(100, '1 m'),
+        limiter: Ratelimit.slidingWindow(20, '1 m'),
         analytics: true,
         prefix: 'ratelimit:api',
     }),
 
     redirect: new Ratelimit({
         redis,
-        limiter: Ratelimit.slidingWindow(10, '1 m'),
+        limiter: Ratelimit.slidingWindow(100, '1 m'),
         analytics: true,
         prefix: 'ratelimit:redirect',
     }),

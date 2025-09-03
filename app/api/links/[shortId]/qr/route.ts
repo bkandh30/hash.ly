@@ -10,7 +10,7 @@ export async function GET(
     { params }: { params: { shortId: string } }
 ) {
     try {
-        const { shortId } = params;
+        const { shortId } = await params;
 
         if (!validateShortId(shortId)) {
             return NextResponse.json(
@@ -118,4 +118,4 @@ export async function GET(
     }
 }
 
-export const runtime = 'edge';
+//export const runtime = 'edge';

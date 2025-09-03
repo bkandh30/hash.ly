@@ -15,7 +15,7 @@ export async function GET(
         const rateLimitResponse = await withRateLimit(request, 'redirect');
         if (rateLimitResponse) return rateLimitResponse;
         
-        const { shortId } = params;
+        const { shortId } = await params;
         
         if (!validateShortId(shortId)) {
             return new NextResponse('Invalid link', { status: 400 });
@@ -154,4 +154,4 @@ export async function GET(
     }
 }
 
-export const runtime = 'edge';
+// export const runtime = 'edge';

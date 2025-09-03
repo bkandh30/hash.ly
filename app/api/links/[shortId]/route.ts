@@ -14,7 +14,7 @@ export async function GET(
         if (rateLimitResponse)
             return rateLimitResponse;
 
-        const { shortId } = params;
+        const { shortId } = await params;
 
         if (!validateShortId(shortId)) {
             return NextResponse.json(

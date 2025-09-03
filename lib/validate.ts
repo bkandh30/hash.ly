@@ -71,3 +71,8 @@ export async function validateUrl(url: string): Promise<string> {
 
     return parsed.toString();
 }
+
+export function validateShortId(shortId: string): boolean {
+    const pattern = /^[A-Za-z0-9_-]{5,12}$/;
+    return pattern.test(shortId);
+}

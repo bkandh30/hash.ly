@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
+import { desc } from "drizzle-orm";
 import { links } from "@/lib/schema";
 import { validateUrl, ValidationError } from "@/lib/validate";
 import { generateShortId, createId } from "@/lib/id";
@@ -90,3 +91,36 @@ export async function POST(request: NextRequest) {
         );
     }
 }
+
+export async function GET(request: NextRequest) {
+    try {
+        const rateLimitResponse = await withRateLimit(request, 'api');
+
+        if (rateLimitResponse)
+            return rateLimitResponse;
+
+        const recentLinks = await db
+            .select()
+            .from(links)
+            .orderBy(desc(links.createdAt))
+            .limit(25);
+
+        return NextResponse.json({
+            links: recentLinks,
+            count: recentLinks.length,
+        });
+    } catch (error) {
+        console.error('Error fetching links:', error);
+        return NextResponse.json(
+            {
+                error: {
+                    code: 'INTERNAL_ERROR',
+                    message: 'Failed to fetch links',
+                },
+            },
+            { status: 500 }
+        );
+    }
+}
+
+export const runtime = 'edge';

@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
             {
                 shortId,
-                shortUrl: `${appUrl}/${shortId}`,
+                shortUrl: `${appUrl}/s/${shortId}`,
                 longUrl: normalizedUrl,
                 createdAt: new Date().toISOString(),
                 expiresAt: expiresAt.toISOString(),

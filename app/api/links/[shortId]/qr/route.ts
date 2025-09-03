@@ -60,7 +60,7 @@ export async function GET(
         }
 
         const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-        const fullUrl = `${appUrl}/${shortId}`;
+        const fullUrl = `${appUrl}/s/${shortId}`;
 
         if (format === 'svg') {
             const svg = await QRCode.toString(fullUrl, {

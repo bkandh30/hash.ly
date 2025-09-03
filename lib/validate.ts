@@ -38,7 +38,7 @@ export async function validateUrl(url: string): Promise<string> {
         throw new ValidationError('Invalid URL Format', 'INVALID_URL');
     }
 
-    if (!['http', 'https'].includes(parsed.protocol.toLowerCase())) {
+    if (!['http:', 'https:'].includes(parsed.protocol.toLowerCase())) {
         throw new ValidationError('Only HTTP and HTTPS URLs are allowed', 'INVALID_PROTOCOL');
     }
 

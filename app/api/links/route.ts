@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
             expiresAt,
         });
 
-        const appUrl = process.env.NEXT_PUBLIC_APP_UR || 'http://localhost:3000';
+        const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
         return NextResponse.json(
             {
                 shortId,

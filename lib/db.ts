@@ -1,12 +1,11 @@
 import { drizzle } from "drizzle-orm/libsql";
 import { links, clicks } from "./schema";
 import { createClient } from "@libsql/client";
+import { validateEnv } from "./env";
 
 const schema = { links, clicks };
 
-if (!process.env.TURSO_DATABASE_URL || !process.env.TURSO_AUTH_TOKEN) {
-    throw new Error("Database credentials are not set in environment variables");
-}
+validateEnv();
 
 const client = createClient({
     url: process.env.TURSO_DATABASE_URL!,

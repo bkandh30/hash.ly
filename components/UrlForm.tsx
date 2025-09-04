@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { createLink, LocalLink, getShortUrl } from '@/lib/api';
-import { Link2 } from 'lucide-react';
+import { Link2, Copy, Check } from 'lucide-react';
 import { formatDate, getTimeUntilExpiry } from '@/lib/utils';
 
 interface UrlFormProps {
@@ -14,11 +14,13 @@ export default function UrlForm({ onLinkCreated }: UrlFormProps) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState<LocalLink | null>(null);
+    const [copied, setCopied] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
         setSuccess(null);
+        setCopied(false);
 
         if (!url) {
             setError('Please enter a URL');
@@ -33,7 +35,7 @@ export default function UrlForm({ onLinkCreated }: UrlFormProps) {
             onLinkCreated(link);
             setUrl('');
 
-            setTimeout(() => setSuccess(null), 5000);
+            setTimeout(() => setSuccess(null), 10000);
         } catch (err: unknown) {
             if (err instanceof Error) {
                 setError(err.message);
@@ -42,6 +44,18 @@ export default function UrlForm({ onLinkCreated }: UrlFormProps) {
             }
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleCopy = async () => {
+        if (!success) return;
+
+        try {
+            await navigator.clipboard.writeText(getShortUrl(success.shortId));
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        } catch (err) {
+            console.error('Failed to copy:', err);
         }
     };
 
@@ -75,21 +89,40 @@ export default function UrlForm({ onLinkCreated }: UrlFormProps) {
             )}
 
             {success && (
-                <div className="p-6 bg-white rounded-2xl shadow-medium border">
-                    <h3 className="text-lg font-semibold mb-4">
+                <div className="p-5 bg-green-50/50 rounded-2xl border border-green-200/50">
+                    <p className="text-sm font-medium text-green-700 mb-3">
                         Link created successfully!
-                    </h3>
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                        <div className="flex-1">
-                            <p className="text-sm text-muted-foreground mb-1">Short URL:</p>
-                            <p className="text-lg font-mono text-primary break-all">
-                                {getShortUrl(success.shortId)}
-                            </p>
+                    </p>
+                    
+                    <div className="space-y-3">
+                        <div>
+                            <p className="text-xs text-gray-600 mb-1 text-center">Short URL:</p>
+                            <div className="flex items-center justify-center gap-2">
+                                <a
+                                    href={getShortUrl(success.shortId)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-base font-mono text-blue-800 hover:text-blue-1000 hover:underline break-all"
+                                >
+                                    {getShortUrl(success.shortId)}
+                                </a>
+                                <button
+                                    onClick={handleCopy}
+                                    className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors flex-shrink-0"
+                                    title={copied ? "Copied!" : "Copy to clipboard"}
+                                    aria-label={copied ? "Copied to clipboard" : "Copy to clipboard"}
+                                >
+                                    {copied ? (
+                                        <Check className="w-4 h-4 text-green-600" />
+                                    ) : (
+                                        <Copy className="w-4 h-4 text-gray-600" />
+                                    )}
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    <div className="mt-4 text-sm text-muted-foreground">
-                        Expires: {formatDate(success.expiresAt)} (
-                        {getTimeUntilExpiry(success.expiresAt)})
+                        <p className="text-xs text-gray-500 text-center">
+                            Expires: {formatDate(success.expiresAt)} ({getTimeUntilExpiry(success.expiresAt)})
+                        </p>
                     </div>
                 </div>
             )}

@@ -74,5 +74,6 @@ export function getQrUrl(
 
 export function getShortUrl(shortId: string): string {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-    return `${baseUrl}/s/${shortId}`;
+    const cleanBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+    return `${cleanBaseUrl}/s/${shortId}`;
 }

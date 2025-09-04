@@ -17,7 +17,7 @@ export default function Footer() {
                         <span>
                             Developed by{' '}
                             <a
-                                href="https://github.com/bkandh30/hash-ly"
+                                href="https://github.com/bkandh30/hash.ly"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="font-medium text-blue-600 hover:underline"

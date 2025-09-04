@@ -25,13 +25,18 @@ export default function CopyButton({ text, className = '' }: CopyButtonProps) {
         <button
             onClick={handleCopy}
             className={`p-1.5 hover:bg-gray-100 rounded transition-colors ${className}`}
-            title="Copy to Clipboard"
+            title={copied ? "Copied!" : "Copy to clipboard"}
+            aria-label={copied ? "Link copied to clipboard" : "Copy link to clipboard"}
+            aria-live="polite"
         >
             {copied ? (
                 <Check className="w-4 h-4 text-green-600" />
             ) : (
                 <Copy className="w-4 h-4 text-gray-600" />
             )}
+            <span className="sr-only">
+                {copied ? "Copied successfully" : "Copy to clipboard"}
+            </span>
         </button>
     );
 }

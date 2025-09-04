@@ -1,0 +1,18 @@
+{
+    "buildCommand": "pnpm build",
+    "outputDirectory": ".next",
+    "framework": "nextjs",
+    "installCommand": "pnpm install",
+    "regions": ["iad1"],
+    "functions": {
+        "app/api/links/route.ts": {
+            "maxDuration": 10
+        },
+        "app/api/links/[shortId]/route.ts": {
+            "maxDuration": 10
+        },
+        "app/s/[shortId]/route.ts": {
+            "maxDuration": 10
+        }
+    }
+}

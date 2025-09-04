@@ -1,103 +1,69 @@
-import Image from "next/image";
+'use client';
+
+import { useState, useEffect } from 'react';
+import { LocalLink } from '@/lib/api';
+import LinkTable from '@/components/LinkTable';
+import UrlForm from '@/components/UrlForm';
+import Footer from '@/components/Footer';
+import Header from '@/components/Header';
+
+const STORAGE_KEY = 'hashly-links';
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    const [links, setLinks] = useState<LocalLink[]>([]);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    useEffect(() => {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+            try {
+                const parsedLinks = JSON.parse(stored);
+                setLinks(parsedLinks);
+            } catch (error) {
+                console.error('Failed to parse stored links:', error);
+            }
+        }
+    }, []);
+
+    useEffect(() => {
+        if (links.length > 0) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(links));
+        }
+    }, [links]);
+
+    const handleLinkCreated = (link: LocalLink) => {
+        setLinks((prev) => [link, ...prev]);
+    };
+
+    return (
+        <div className="min-h-screen bg-background flex flex-col">
+            <Header />
+
+            <main className="flex-1">
+                <section className="py-20 px-4 bg-gradient-to-b from-blue-50/50 to-transparent">
+                    <div className="container mx-auto text-center">
+                        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-foreground mb-6">
+                            <span>Shorten Your URLs</span>
+                            <span className="block text-blue-500">Share with Style</span>
+                        </h1>
+                        <p className="text-lg md:text-xl text-muted-foreground mb-12 max-w-3xl mx-auto">
+                            Transform long, unwieldy URLs into clean, shareable links. Track
+                            clicks, generate QR codes, and manage all your links in one place.
+                        </p>
+
+                        <div className="max-w-4xl mx-auto">
+                            <UrlForm onLinkCreated={handleLinkCreated} />
+                        </div>
+                    </div>
+                </section>
+
+                <section className="py-12 px-4">
+                    <div className="container mx-auto max-w-6xl">
+                        <LinkTable links={links} />
+                    </div>
+                </section>
+            </main>
+
+            <Footer />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+    );
 }

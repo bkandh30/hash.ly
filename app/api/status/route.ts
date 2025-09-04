@@ -4,11 +4,31 @@ import { sql } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { redis } from "@/lib/rate-limit";
 
+interface StatusResponse {
+    timestamp: string;
+    status: string;
+    services: {
+        database: string;
+        redis: string;
+    };
+    stats: {
+        totalLinks: number;
+        totalClicks: number;
+    };
+}
+
 export async function GET() {
-    const status: any = {
+    const status: StatusResponse = {
         timestamp: new Date().toISOString(),
-        services: {},
-        stats: {},
+        status: 'operational',
+        services: {
+            database: 'operational',
+            redis: 'operational'
+        },
+        stats: {
+            totalLinks: 0,
+            totalClicks: 0
+        },
     };
 
     try {

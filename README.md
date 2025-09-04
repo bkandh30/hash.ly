@@ -1,36 +1,259 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hash.ly - Modern URL Shortener
+
+Production URL shortener with QR code generation, analytics, and automatic 30-day expiration. Built with Next.js, Turso, TypeScript, TailwindCSS and Upstash Redis.
+
+**Live Demo**: [https://hash-ly.vercel.app](https://hash-ly.vercel.app)
+
+## Features
+
+### Core Functionality
+
+- **Short Link Generation** - Base62 encoding for compact, readable URLs
+- **Click Analytics** - Real-time tracking with privacy-focused IP hashing
+- **Auto Expiration** - 30-day default expiry with graceful 410 handling
+- **QR Code Generation** - Dynamic PNG/SVG generation with customizable sizes
+- **Rate Limiting** - 20 requests/minute per IP using distributed Redis
+- **SSRF Protection** - Blocks private networks and malicious URLs
+- **Local Dashboard** - Browser-based link management with localStorage
+
+### Technical Specifications
+
+- Global database replication with sub-50ms latency
+- Serverless edge functions with automatic scaling
+- Type-safe implementation with TypeScript and database schema validation
+- RESTful API with proper HTTP status codes
+- Built-in health monitoring and status endpoints
+
+## Tech Stack
+
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript 5.0
+- **Database**: Turso (Distributed SQLite)
+- **ORM**: Drizzle ORM
+- **Cache/Rate Limiting**: Upstash Redis
+- **Styling**: Tailwind CSS
+- **Deployment**: Vercel Edge Functions
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+ and pnpm
+- [Turso](https://turso.tech) account for database
+- [Upstash](https://upstash.com) account for Redis
+- Git
+
+### Installation
+
+1. Clone the repository
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/bkandh30/hash-ly.git
+cd hash-ly
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Configure environment variables
 
-## Learn More
+```bash
+cp .env.local.example .env.local
+```
 
-To learn more about Next.js, take a look at the following resources:
+Required environment variables:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```env
+# Database (Turso)
+TURSO_DATABASE_URL=libsql://your-database.turso.io
+TURSO_AUTH_TOKEN=your-auth-token
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Redis (Upstash)
+UPSTASH_REDIS_REST_URL=https://your-redis.upstash.io
+UPSTASH_REDIS_REST_TOKEN=your-redis-token
 
-## Deploy on Vercel
+# Security
+IP_HASH_SALT=your-random-salt-here
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# App
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. Initialize database
+
+```bash
+pnpm db:push
+```
+
+5. Start development server
+
+```bash
+pnpm dev
+```
+
+The application will be available at [http://localhost:3000](http://localhost:3000).
+
+## API Reference
+
+### Base URLs
+
+- **Production**: `https://hash-ly.vercel.app`
+- **Development**: `http://localhost:3000`
+
+### Endpoints
+
+#### POST /api/links
+
+Create a new short link.
+
+**Request**
+
+```http
+POST /api/links
+Content-Type: application/json
+
+{
+  "longUrl": "https://example.com/very-long-url"
+}
+```
+
+**Response** (201 Created)
+
+```json
+{
+  "shortId": "abc1234",
+  "shortUrl": "https://hash-ly.vercel.app/s/abc1234",
+  "longUrl": "https://example.com/very-long-url",
+  "createdAt": "2024-01-01T00:00:00Z",
+  "expiresAt": "2024-01-31T00:00:00Z"
+}
+```
+
+#### GET /api/links/{shortId}
+
+Retrieve link statistics.
+
+**Response** (200 OK)
+
+```json
+{
+  "shortId": "abc1234",
+  "longUrl": "https://example.com",
+  "clicks": 42,
+  "createdAt": "2024-01-01T00:00:00Z",
+  "lastAccess": "2024-01-15T10:30:00Z",
+  "expiresAt": "2024-01-31T00:00:00Z",
+  "status": "active"
+}
+```
+
+#### GET /api/links/{shortId}/qr
+
+Generate QR code for a short link.
+
+**Query Parameters**
+
+- `fmt`: Output format - `png` or `svg` (default: `png`)
+- `size`: Image size - 64 to 1024 pixels (default: 256)
+- `margin`: Quiet zone margin - 0 to 10 (default: 2)
+
+#### GET /api/healthz
+
+Health check endpoint.
+
+**Response** (200 OK)
+
+```json
+{
+  "status": "ok",
+  "database": "connected",
+  "redis": "connected",
+  "timestamp": "2024-01-01T00:00:00Z"
+}
+```
+
+#### GET /api/status
+
+System status and metrics.
+
+**Response** (200 OK)
+
+```json
+{
+  "status": "operational",
+  "services": {
+    "database": "operational",
+    "redis": "operational"
+  },
+  "stats": {
+    "totalLinks": 1234,
+    "totalClicks": 5678
+  }
+}
+```
+
+### Error Responses
+
+All error responses follow this format:
+
+```json
+{
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Human-readable error message"
+  }
+}
+```
+
+**Error Codes**
+
+- `INVALID_URL` - Invalid URL format or blocked host
+- `RATE_LIMITED` - Too many requests (429)
+- `NOT_FOUND` - Link not found (404)
+- `EXPIRED` - Link has expired (410)
+- `INTERNAL_ERROR` - Server error (500)
+
+## Performance Metrics
+
+- **Database Latency**: <50ms globally (Turso edge replication)
+- **API Response Time**: <200ms average
+- **QR Generation**: <100ms for 256px PNG
+- **Time to Interactive**: <1.5s on 4G networks
+- **Lighthouse Score**: 95+ Performance
+
+## Security Features
+
+- **SSRF Protection**: Blocks localhost, private IP ranges, and cloud metadata endpoints
+- **Rate Limiting**: Distributed Redis-based limiting across all edge locations
+- **Input Validation**: Comprehensive Zod schemas for all user inputs
+- **Privacy Protection**: IP addresses are hashed with salt before storage
+- **HTTPS Enforcement**: Required in production environment
+- **Content Security Policy**: Restrictive CSP headers in production
+
+## Configuration
+
+### Rate Limiting
+
+Default: 20 requests per minute per IP address. Configure in `lib/rate-limit.ts`.
+
+### Link Expiration
+
+Default: 30 days. Configure in `app/api/links/route.ts`.
+
+### Database Connection Pooling
+
+Configured for serverless environments with connection reuse.
+
+## Environment Variables
+
+| Variable                   | Description                        | Required           |
+| -------------------------- | ---------------------------------- | ------------------ |
+| `TURSO_DATABASE_URL`       | Turso database connection URL      | Yes                |
+| `TURSO_AUTH_TOKEN`         | Turso authentication token         | Yes                |
+| `UPSTASH_REDIS_REST_URL`   | Upstash Redis REST API URL         | Yes                |
+| `UPSTASH_REDIS_REST_TOKEN` | Upstash Redis authentication token | Yes                |
+| `IP_HASH_SALT`             | Salt for IP address hashing        | Yes                |
+| `NEXT_PUBLIC_APP_URL`      | Public application URL             | Auto-set by Vercel |

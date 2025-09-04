@@ -45,7 +45,7 @@ export default function Home() {
                             <span>Shorten Your URLs</span>
                             <span className="block text-blue-500">Share with Style</span>
                         </h1>
-                        <p className="text-lg md:text-xl text-muted-foreground mb-12 max-w-3xl mx-auto">
+                        <p className="text-lg md:text-xl text-slate-500 mb-12 max-w-3xl mx-auto">
                             Transform long, unwieldy URLs into clean, shareable links. Track
                             clicks, generate QR codes, and manage all your links in one place.
                         </p>

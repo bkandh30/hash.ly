@@ -48,6 +48,7 @@ export default function LinkTable({ links }: LinkTableProps) {
                 <div className="w-24 h-24 mx-auto mb-6 bg-muted rounded-2xl flex items-center justify-center">
                     <ExternalLink className="w-12 h-12 text-muted-foreground" />
                 </div>
+                {/* Fixed: Changed from h3 to h2 for proper heading hierarchy */}
                 <h2 className="text-xl font-semibold mb-2">No links yet</h2>
                 <p className="text-muted-foreground">
                     Paste a URL above to get started with your first shortened link
@@ -118,7 +119,8 @@ export default function LinkTable({ links }: LinkTableProps) {
 
                                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                                         <div className="flex items-center gap-6 text-sm text-muted-foreground">
-                                            <div className="flex items-center gap-1 px-2 py-1 bg-muted rounded-full" 
+                                            <div 
+                                                className="flex items-center gap-1 px-2 py-1 bg-muted rounded-full" 
                                                 title="Clicks"
                                                 aria-label={`${link.stats?.clicks || 0} clicks`}
                                             >

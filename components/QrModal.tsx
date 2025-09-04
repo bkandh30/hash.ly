@@ -38,25 +38,27 @@ export default function QrModal({ shortId, isOpen, onClose }: QrModalProps) {
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center" role="dialog" aria-modal="true" aria-labelledby="qr-modal-title">
             <div
                 className="absolute inset-0 bg-black bg-opacity-50"
                 onClick={onClose}
+                aria-hidden="true"
             />
-            <div className="relative bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <div className="relative bg-white rounded-lg p-6 max-w-md w-full mx-4" role="document">
                 <button
                     onClick={onClose}
                     className="absolute top-4 right-4 p-1 hover:bg-gray-100 rounded-full transition-colors"
+                    aria-label="Close QR code modal"
                 >
-                    <X className="w-5 h-5" />
+                    <X className="w-5 h-5" aria-hidden="true" />
                 </button>
 
-                <h2 className="text-xl font-semibold mb-4">QR Code</h2>
+                <h2 id="qr-modal-title" className="text-xl font-semibold mb-4">QR Code</h2>
 
                 <div className="flex justify-center mb-4 p-4 bg-gray-50 rounded-lg">
                     <Image
                         src={getQrUrl(shortId, 'png', 256)}
-                        alt="QR Code"
+                        alt={`QR code for short link ${shortId}`}
                         width={256}
                         height={256}
                         unoptimized
@@ -67,15 +69,17 @@ export default function QrModal({ shortId, isOpen, onClose }: QrModalProps) {
                     <button
                         onClick={() => handleDownload('png')}
                         className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                        aria-label="Download QR code as PNG image"
                     >
-                        <Download className="w-4 h-4" />
+                        <Download className="w-4 h-4" aria-hidden="true" />
                         Download PNG
                     </button>
                     <button
                         onClick={() => handleDownload('svg')}
                         className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                        aria-label="Download QR code as SVG vector"
                     >
-                        <Download className="w-4 h-4" />
+                        <Download className="w-4 h-4" aria-hidden="true" />
                         Download SVG
                     </button>
                 </div>

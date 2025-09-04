@@ -97,9 +97,10 @@ export async function GET(
             return new NextResponse(buffer, {
                 status: 200,
                 headers: {
-                    'Content-Type': 'image/png',
+                    'Content-Type': format === 'svg' ? 'image/svg+xml' : 'image/png',
                     'Cache-Control': 'public, max-age=2592000, immutable',
-                    'ETag': `"${shortId}-${size}-${margin}-png"`,
+                    'ETag': `"${shortId}-${size}-${margin}-${format}"`,
+                    'Vary': 'Accept-Encoding',
                 },
             });
         }

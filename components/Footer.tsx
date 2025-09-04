@@ -7,7 +7,6 @@ export default function Footer() {
         <footer className="w-full border-t bg-background mt-auto">
             <div className="container mx-auto px-4 py-6">
                 <div className="flex flex-col items-center gap-2 text-center">
-                    {/* Copyright */}
                     <p className="text-xs text-muted-foreground">
                         © {currentYear} <span className="font-medium">Hash.ly</span>
                     </p>
@@ -35,7 +34,7 @@ export default function Footer() {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-muted-foreground hover:text-foreground transition-colors"
-                            aria-label="View Bhavya Kandhari's GitHub profile"
+                            aria-label="Visit Bhavya Kandhari's GitHub profile"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -52,7 +51,7 @@ export default function Footer() {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-muted-foreground hover:text-blue-600 transition-colors"
-                            aria-label="View Bhavya Kandhari's LinkedIn profile"
+                            aria-label="Visit Bhavya Kandhari's LinkedIn profile"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"

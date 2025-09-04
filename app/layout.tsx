@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
+import { Inter } from "next/font/google";
 
 export const metadata: Metadata = {
     title: "Hash.ly - Modern URL Shortener",
@@ -26,13 +27,29 @@ export const metadata: Metadata = {
     viewport: "width=device-width, initial-scale=1, maximum-scale=5",
 };
 
+const inter = Inter({
+    subsets: ['latin'],
+    display: 'swap',
+    preload: true,
+    fallback: [
+        '-apple-system',
+        'BlinkMacSystemFont',
+        'Segoe UI',
+        'Roboto',
+        'Helvetica Neue',
+        'Arial',
+        'sans-serif',
+    ],
+    variable: '--font-inter',
+});
+
 export default function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
+        <html lang="en" className={inter.variable}>
             <head>
                 <link rel="preconnect" href="https://vercel.live" />
                 <link rel="dns-prefetch" href="https://vercel.live" />
@@ -40,7 +57,7 @@ export default function RootLayout({
                 <link rel="preconnect" href="https://vitals.vercel-insights.com" />
                 <link rel="dns-prefetch" href="https://vitals.vercel-insights.com" />
             </head>
-            <body className="antialiased">
+            <body className={`${inter.className} antialiased`}>
                 {children}
                 <Analytics />
                 <SpeedInsights />

@@ -4,20 +4,47 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Hash.ly - Modern URL Shortener",
-  description: "Transform long URLs into clean, shareable links with QR codes and analytics",
+    title: "Hash.ly - Modern URL Shortener",
+    description: "Transform long URLs into clean, shareable links with QR codes and analytics",
+    keywords: "url shortener, link shortener, qr, qr code, analytics, hash.ly",
+    authors: [{ name: "Bhavya Kandhari" }],
+    openGraph: {
+        title: "Hash.ly - Modern URL Shortener",
+        description: "Transform long URLs into clean, shareable links",
+        type: "website",
+        url: "https://hash-ly.vercel.app",
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Hash.ly - Modern URL Shortener",
+        description: "Transform long URLs into clean, shareable links",
+    },
+    robots: {
+        index: true,
+        follow: true,
+    },
+    viewport: "width=device-width, initial-scale=1, maximum-scale=5",
 };
 
 export default function RootLayout({
-  children,
+    children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body className="antialiased">{children}</body>
-      <Analytics />
-      <SpeedInsights />
-    </html>
-  )
+    return (
+        <html lang="en">
+            <head>
+                <link rel="preconnect" href="https://vercel.live" />
+                <link rel="dns-prefetch" href="https://vercel.live" />
+                
+                <link rel="preconnect" href="https://vitals.vercel-insights.com" />
+                <link rel="dns-prefetch" href="https://vitals.vercel-insights.com" />
+            </head>
+            <body className="antialiased">
+                {children}
+                <Analytics />
+                <SpeedInsights />
+            </body>
+        </html>
+    );
 }

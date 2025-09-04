@@ -68,7 +68,7 @@ export default function LinkTable({ links }: LinkTableProps) {
                         return (
                             <div
                                 key={link.shortId}
-                                className={`p-6 bg-card rounded-2xl border transition-all duration-200 hover:shadow-medium ${
+                                className={`p-6 bg-card rounded-xl border transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 ${
                                     isExpired && 'border-destructive/50 bg-destructive/5'
                                 }`}
                             >
@@ -102,17 +102,25 @@ export default function LinkTable({ links }: LinkTableProps) {
                                             <p className="text-sm text-muted-foreground mb-1 font-bold">
                                                 Short URL
                                             </p>
-                                            <p className="font-mono text-primary font-medium">
-                                                {getShortUrl(link.shortId)}
-                                            </p>
+                                            <div className="flex items-center gap-2">
+                                                <a
+                                                    href={getShortUrl(link.shortId)}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="font-mono text-base font-medium text-blue-700 hover:underline"
+                                                >
+                                                    {getShortUrl(link.shortId)}
+                                                </a>
+                                                <CopyButton text={getShortUrl(link.shortId)} />
+                                            </div>
                                         </div>
                                     </div>
 
                                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                                         <div className="flex items-center gap-6 text-sm text-muted-foreground">
-                                            <div className="flex items-center gap-1" title="Clicks">
-                                                <TrendingUp className="w-4 h-4" />
-                                                <span>{link.stats?.clicks || 0} clicks</span>
+                                            <div className="flex items-center gap-1 px-2 py-1 bg-muted rounded-full" title="Clicks">
+                                                <TrendingUp className="w-4 h-4 text-primary" />
+                                                <span className="font-semibold">{link.stats?.clicks || 0} click(s)</span>
                                             </div>
                                             <div
                                                 className="flex items-center gap-1"
@@ -124,7 +132,6 @@ export default function LinkTable({ links }: LinkTableProps) {
                                         </div>
 
                                         <div className="flex items-center gap-2">
-                                            <CopyButton text={getShortUrl(link.shortId)} />
                                             <button
                                                 onClick={() => setSelectedQr(link.shortId)}
                                                 className="p-2 hover:bg-secondary rounded-lg transition-colors"

@@ -76,7 +76,7 @@ export default function LinkTable({ links }: LinkTableProps) {
                                     <div className="flex-1 space-y-3">
                                         <div>
                                             <div className="flex items-center gap-2 mb-1">
-                                                <p className="text-sm text-muted-foreground">
+                                                <p className="text-sm text-muted-foreground font-bold">
                                                     Original URL
                                                 </p>
                                                 {isExpired && (
@@ -99,7 +99,7 @@ export default function LinkTable({ links }: LinkTableProps) {
                                         </div>
 
                                         <div>
-                                            <p className="text-sm text-muted-foreground mb-1">
+                                            <p className="text-sm text-muted-foreground mb-1 font-bold">
                                                 Short URL
                                             </p>
                                             <p className="font-mono text-primary font-medium">

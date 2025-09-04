@@ -48,7 +48,7 @@ export default function LinkTable({ links }: LinkTableProps) {
                 <div className="w-24 h-24 mx-auto mb-6 bg-muted rounded-2xl flex items-center justify-center">
                     <ExternalLink className="w-12 h-12 text-muted-foreground" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">No links yet</h3>
+                <h2 className="text-xl font-semibold mb-2">No links yet</h2>
                 <p className="text-muted-foreground">
                     Paste a URL above to get started with your first shortened link
                 </p>
@@ -118,7 +118,10 @@ export default function LinkTable({ links }: LinkTableProps) {
 
                                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                                         <div className="flex items-center gap-6 text-sm text-muted-foreground">
-                                            <div className="flex items-center gap-1 px-2 py-1 bg-muted rounded-full" title="Clicks">
+                                            <div className="flex items-center gap-1 px-2 py-1 bg-muted rounded-full" 
+                                                title="Clicks"
+                                                aria-label={`${link.stats?.clicks || 0} clicks`}
+                                            >
                                                 <TrendingUp className="w-4 h-4 text-primary" />
                                                 <span className="font-semibold">{link.stats?.clicks || 0} click(s)</span>
                                             </div>
@@ -136,6 +139,7 @@ export default function LinkTable({ links }: LinkTableProps) {
                                                 onClick={() => setSelectedQr(link.shortId)}
                                                 className="p-2 hover:bg-secondary rounded-lg transition-colors"
                                                 title="View QR Code"
+                                                aria-label="View QR Code for this link"
                                             >
                                                 <QrCode className="w-4 h-4" />
                                             </button>

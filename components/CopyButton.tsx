@@ -30,9 +30,9 @@ export default function CopyButton({ text, className = '' }: CopyButtonProps) {
             aria-live="polite"
         >
             {copied ? (
-                <Check className="w-4 h-4 text-green-600" />
+                <Check className="w-4 h-4 text-green-600" aria-hidden="true" />
             ) : (
-                <Copy className="w-4 h-4 text-gray-600" />
+                <Copy className="w-4 h-4 text-gray-600" aria-hidden="true" />
             )}
             <span className="sr-only">
                 {copied ? "Copied successfully" : "Copy to clipboard"}

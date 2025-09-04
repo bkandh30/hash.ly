@@ -9,7 +9,7 @@ import { createId } from '@/lib/id';
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: { shortId: string } }
+    { params }: { params: Promise<{ shortId: string }> }
 ) {
     try {
         const rateLimitResponse = await withRateLimit(request, 'redirect');

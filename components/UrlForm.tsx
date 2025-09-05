@@ -68,13 +68,13 @@ export default function UrlForm({ onLinkCreated }: UrlFormProps) {
                         placeholder="https://example.com/very-long-url"
                         value={url}
                         onChange={(e) => setUrl(e.target.value)}
-                        className="flex-1 h-14 px-6 text-lg border-2 rounded-2xl bg-white focus:border-primary focus:outline-none transition-all duration-200"
+                        className="flex-1 h-14 sm:h-14 py-4 sm:py-0 px-4 sm:px-6 text-base sm:text-lg border-2 rounded-2xl bg-white focus:border-primary focus:outline-none transition-all duration-200"
                         disabled={loading}
                     />
                     <button
                         type="submit"
                         disabled={loading || !url.trim()}
-                        className="h-14 px-8 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-2xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
+                        className="h-14 sm:h-14 py-4 sm:py-0 px-6 sm:px-8 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-2xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
                     >
                         <Link2 className="w-5 h-5" />
                         {loading ? 'Creating...' : 'Shorten'}

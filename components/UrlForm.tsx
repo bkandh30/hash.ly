@@ -35,7 +35,7 @@ export default function UrlForm({ onLinkCreated }: UrlFormProps) {
             onLinkCreated(link);
             setUrl('');
 
-            setTimeout(() => setSuccess(null), 10000);
+            setTimeout(() => setSuccess(null), 15000);
         } catch (err: unknown) {
             if (err instanceof Error) {
                 setError(err.message);

@@ -64,6 +64,29 @@ export async function getStats(shortId: string): Promise<StatsResponse> {
     }
 }
 
+export interface BatchStatsResponse {
+    success: boolean;
+    data: Record<string, StatsResponse | { error: string; message: string }>;
+    requested: number;
+    found: number;
+}
+
+export async function getBatchStats(shortIds: string[]): Promise<BatchStatsResponse> {
+    try {
+        const response: AxiosResponse<BatchStatsResponse> = await api.post<BatchStatsResponse>(
+            '/api/links/batch-stats',
+            { shortIds }
+        );
+
+        return response.data;
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error) && error.response?.data?.error?.message) {
+            throw new Error(error.response.data.error.message);
+        }
+        throw new Error('Failed to fetch batch stats');
+    }
+}
+
 export function getQrUrl(
     shortId: string,
     format: 'png' | 'svg' = 'png',

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { QrCode, ExternalLink, TrendingUp, Calendar } from 'lucide-react';
 import { LocalLink, getShortUrl, StatsResponse, getBatchStats } from '@/lib/api';
 import { formatDate } from '@/lib/utils';
+import { BATCH_CONFIG } from '@/lib/constants';
 import QrModal from './QrModal';
 import CopyButton from './CopyButton';
 
@@ -80,7 +81,7 @@ export default function LinkTable({ links }: LinkTableProps) {
 
         const interval = setInterval(() => {
             fetchAllStats();
-        }, 10000);
+        }, BATCH_CONFIG.POLL_INTERVAL);
 
         return () => clearInterval(interval);
     }, [links]);

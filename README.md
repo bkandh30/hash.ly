@@ -1,6 +1,7 @@
 # Hash.ly - Modern URL Shortener
 
-Production URL shortener with QR code generation, analytics, and automatic 30-day expiration. Built with Next.js, Turso, TypeScript, TailwindCSS and Upstash Redis.
+A production-ready URL shortener with QR code generation, click analytics, and automatic expiration.
+Built with Next.js, Turso, TypeScript, TailwindCSS, and Upstash Redis.
 
 **Live Demo**: [https://hash-ly.vercel.app](https://hash-ly.vercel.app)
 
@@ -18,9 +19,9 @@ Production URL shortener with QR code generation, analytics, and automatic 30-da
 
 ### Technical Specifications
 
-- Global database replication with sub-50ms latency
+- Global database replication with distributed SQLite
 - Serverless edge functions with automatic scaling
-- Type-safe implementation with TypeScript and database schema validation
+- Type-safe implementation with comprehensive validation
 - RESTful API with proper HTTP status codes
 - Built-in health monitoring and status endpoints
 
@@ -61,7 +62,7 @@ pnpm install
 3. Configure environment variables
 
 ```bash
-cp .env.local.example .env.local
+cp .env.example .env.local
 ```
 
 Required environment variables:
@@ -150,6 +151,42 @@ Retrieve link statistics.
 }
 ```
 
+#### POST /api/links/batch-stats
+
+Retrieve statistics for multiple links.
+
+**Request**
+
+```http
+POST /api/links/batch-stats
+Content-Type: application/json
+
+{
+  "shortIds": ["abc1234", "def5678"]
+}
+```
+
+**Response** (200 OK)
+
+```json
+{
+  "success": true,
+  "data": {
+    "abc1234": {
+      "shortId": "abc1234",
+      "longUrl": "https://example.com",
+      "clicks": 42,
+      "createdAt": "2024-01-01T00:00:00Z",
+      "lastAccess": "2024-01-15T10:30:00Z",
+      "expiresAt": "2024-01-31T00:00:00Z",
+      "status": "active"
+    }
+  },
+  "requested": 2,
+  "found": 1
+}
+```
+
 #### GET /api/links/{shortId}/qr
 
 Generate QR code for a short link.
@@ -171,7 +208,8 @@ Health check endpoint.
   "status": "ok",
   "database": "connected",
   "redis": "connected",
-  "timestamp": "2024-01-01T00:00:00Z"
+  "timestamp": "2024-01-01T00:00:00Z",
+  "linksCount": 1234
 }
 ```
 
@@ -216,14 +254,6 @@ All error responses follow this format:
 - `EXPIRED` - Link has expired (410)
 - `INTERNAL_ERROR` - Server error (500)
 
-## Performance Metrics
-
-- **Database Latency**: <50ms globally (Turso edge replication)
-- **API Response Time**: <200ms average
-- **QR Generation**: <100ms for 256px PNG
-- **Time to Interactive**: <1.5s on 4G networks
-- **Lighthouse Score**: 95+ Performance
-
 ## Security Features
 
 - **SSRF Protection**: Blocks localhost, private IP ranges, and cloud metadata endpoints
@@ -257,3 +287,62 @@ Configured for serverless environments with connection reuse.
 | `UPSTASH_REDIS_REST_TOKEN` | Upstash Redis authentication token | Yes                |
 | `IP_HASH_SALT`             | Salt for IP address hashing        | Yes                |
 | `NEXT_PUBLIC_APP_URL`      | Public application URL             | Auto-set by Vercel |
+
+## Development
+
+### Database Commands
+
+```bash
+# Generate database migrations
+pnpm db:generate
+
+# Push schema changes to database
+pnpm db:push
+
+# Open Drizzle Studio
+pnpm db:studio
+
+# Run migrations
+pnpm db:migrate
+```
+
+### Build Commands
+
+```bash
+# Development server
+pnpm dev
+
+# Production build
+pnpm build
+
+# Start production server
+pnpm start
+
+# Analyze bundle size
+pnpm analyze
+```
+
+## Deployment
+
+This application is optimized for Vercel deployment with automatic environment variable detection. The production build includes:
+
+- Bundle optimization and tree shaking
+- Image optimization with multiple formats
+- Edge runtime for global performance
+- Automatic security headers
+- Source map generation disabled for production
+
+## Architecture
+
+### Database Schema
+
+- **links**: Stores URL mappings with metadata
+- **clicks**: Tracks individual click events for analytics
+
+### API Design
+
+RESTful endpoints with proper HTTP status codes, comprehensive error handling, and consistent response formats.
+
+### Security Implementation
+
+Multi-layered security approach including input validation, rate limiting, SSRF protection, and privacy-conscious analytics collection.

@@ -1,5 +1,6 @@
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
+import { RATE_LIMIT_CONFIG } from "./constants";
 
 const redis = new Redis({
     url: process.env.UPSTASH_REDIS_REST_URL!,
@@ -9,21 +10,21 @@ const redis = new Redis({
 export const rateLimiters = {
     create: new Ratelimit({
         redis,
-        limiter: Ratelimit.slidingWindow(20, '1 m'),
+        limiter: Ratelimit.slidingWindow(RATE_LIMIT_CONFIG.CREATE, RATE_LIMIT_CONFIG.WINDOW),
         analytics: true,
         prefix: 'ratelimit:create',
     }),
 
     api: new Ratelimit({
         redis,
-        limiter: Ratelimit.slidingWindow(20, '1 m'),
+        limiter: Ratelimit.slidingWindow(RATE_LIMIT_CONFIG.API, RATE_LIMIT_CONFIG.WINDOW),
         analytics: true,
         prefix: 'ratelimit:api',
     }),
 
     redirect: new Ratelimit({
         redis,
-        limiter: Ratelimit.slidingWindow(100, '1 m'),
+        limiter: Ratelimit.slidingWindow(RATE_LIMIT_CONFIG.REDIRECT, RATE_LIMIT_CONFIG.WINDOW),
         analytics: true,
         prefix: 'ratelimit:redirect',
     }),

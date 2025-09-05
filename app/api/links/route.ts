@@ -6,9 +6,10 @@ import { links } from "@/lib/schema";
 import { validateUrl, ValidationError } from "@/lib/validate";
 import { generateShortId, createId } from "@/lib/id";
 import { withRateLimit } from "@/lib/rate-limit";
+import { LINK_CONFIG } from "@/lib/constants";
 
 const createLinkSchema = z.object({
-    longUrl: z.url().min(1).max(2048),
+    longUrl: z.url().min(LINK_CONFIG.MIN_URL_LENGTH).max(LINK_CONFIG.MAX_URL_LENGTH),
 });
 
 export async function POST(request: NextRequest) {
@@ -53,7 +54,7 @@ export async function POST(request: NextRequest) {
         const shortId = await generateShortId();
 
         const expiresAt = new Date();
-        expiresAt.setDate(expiresAt.getDate() + 30);
+        expiresAt.setDate(expiresAt.getDate() + LINK_CONFIG.EXPIRY_DAYS);
 
         const linkId = createId();
         await db.insert(links).values({

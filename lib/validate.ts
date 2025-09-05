@@ -1,3 +1,5 @@
+import { VALIDATION } from "./constants";
+
 export class ValidationError extends Error {
     constructor(message: string, public code: string = 'INVALID_URL') {
         super(message);
@@ -38,7 +40,7 @@ export async function validateUrl(url: string): Promise<string> {
         throw new ValidationError('Invalid URL Format', 'INVALID_URL');
     }
 
-    if (!['http:', 'https:'].includes(parsed.protocol.toLowerCase())) {
+    if (!VALIDATION.URL_PROTOCOLS.includes(parsed.protocol.toLowerCase() as typeof VALIDATION.URL_PROTOCOLS[number])) {
         throw new ValidationError('Only HTTP and HTTPS URLs are allowed', 'INVALID_PROTOCOL');
     }
 
@@ -73,6 +75,5 @@ export async function validateUrl(url: string): Promise<string> {
 }
 
 export function validateShortId(shortId: string): boolean {
-    const pattern = /^[A-Za-z0-9_-]{5,12}$/;
-    return pattern.test(shortId);
+    return VALIDATION.SHORT_ID_PATTERN.test(shortId);
 }

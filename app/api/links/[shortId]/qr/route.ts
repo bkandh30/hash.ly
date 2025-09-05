@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { links } from "@/lib/schema";
 import { eq } from "drizzle-orm";
 import { validateShortId } from "@/lib/validate";
+import { QR_CONFIG } from "@/lib/constants";
 
 export async function GET(
     request: NextRequest,
@@ -44,8 +45,8 @@ export async function GET(
 
         const searchParams = request.nextUrl.searchParams;
         const format = searchParams.get('fmt') || 'png';
-        const size = Math.min(Math.max(parseInt(searchParams.get('size') || '256'), 64), 1024);
-        const margin = Math.min(Math.max(parseInt(searchParams.get('margin') || '2'), 0), 10);
+        const size = Math.min(Math.max(parseInt(searchParams.get('size') || QR_CONFIG.DEFAULT_SIZE.toString()), QR_CONFIG.MIN_SIZE), QR_CONFIG.MAX_SIZE);
+        const margin = Math.min(Math.max(parseInt(searchParams.get('margin') || QR_CONFIG.DEFAULT_MARGIN.toString()), QR_CONFIG.MIN_MARGIN), QR_CONFIG.MAX_MARGIN);
 
         if (!['png', 'svg'].includes(format)) {
             return NextResponse.json(

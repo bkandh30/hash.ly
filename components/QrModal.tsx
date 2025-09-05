@@ -39,8 +39,9 @@ export default function QrModal({ shortId, isOpen, onClose }: QrModalProps) {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center" role="dialog" aria-modal="true" aria-labelledby="qr-modal-title">
+            {/* CHANGE: Made background more translucent - reduced opacity to 40% */}
             <div
-                className="absolute inset-0 bg-black/75 transition-opacity"
+                className="absolute inset-0 bg-black/40 transition-opacity"
                 style={{ backgroundColor: 'rgba(0, 0, 0, 0.4)' }}
                 onClick={onClose}
                 aria-hidden="true"
@@ -66,10 +67,10 @@ export default function QrModal({ shortId, isOpen, onClose }: QrModalProps) {
                     />
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                     <button
                         onClick={() => handleDownload('png')}
-                        className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                         aria-label="Download QR code as PNG image"
                     >
                         <Download className="w-4 h-4" aria-hidden="true" />
@@ -77,7 +78,7 @@ export default function QrModal({ shortId, isOpen, onClose }: QrModalProps) {
                     </button>
                     <button
                         onClick={() => handleDownload('svg')}
-                        className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                         aria-label="Download QR code as SVG vector"
                     >
                         <Download className="w-4 h-4" aria-hidden="true" />

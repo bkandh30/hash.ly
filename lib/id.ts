@@ -2,14 +2,16 @@ import { customAlphabet } from 'nanoid';
 import { db } from './db';
 import { links } from './schema';
 import { eq } from 'drizzle-orm';
+import { LINK_CONFIG } from './constants';
 
-const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+const generateId = customAlphabet(
+    LINK_CONFIG.SHORT_ID_ALPHABET,
+    LINK_CONFIG.SHORT_ID_LENGTH
+)
 
-const SHORT_ID_LENGTH = 7;
-
-const generateId = customAlphabet(alphabet, SHORT_ID_LENGTH);
-
-export async function generateShortId(maxRetries: number = 5): Promise<string> {
+export async function generateShortId(
+    maxRetries: number = LINK_CONFIG.MAX_GENERATION_RETRIES
+): Promise<string> {
     for (let attempt = 0; attempt < maxRetries; attempt++) {
         const shortId = generateId();
 
@@ -30,5 +32,5 @@ export async function generateShortId(maxRetries: number = 5): Promise<string> {
 }
 
 export function createId(): string {
-    return customAlphabet(alphabet, 16)();
+    return customAlphabet(LINK_CONFIG.SHORT_ID_ALPHABET, 16)();
 }

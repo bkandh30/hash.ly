@@ -40,11 +40,12 @@ export default function QrModal({ shortId, isOpen, onClose }: QrModalProps) {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center" role="dialog" aria-modal="true" aria-labelledby="qr-modal-title">
             <div
-                className="absolute inset-0 bg-black bg-opacity-50"
+                className="absolute inset-0 bg-black/75 transition-opacity"
+                style={{ backgroundColor: 'rgba(0, 0, 0, 0.4)' }}
                 onClick={onClose}
                 aria-hidden="true"
             />
-            <div className="relative bg-white rounded-lg p-6 max-w-md w-full mx-4" role="document">
+            <div className="relative bg-white rounded-lg p-6 max-w-md w-full mx-4 shadow-2xl transform transition-all" role="document">
                 <button
                     onClick={onClose}
                     className="absolute top-4 right-4 p-1 hover:bg-gray-100 rounded-full transition-colors"

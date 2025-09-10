@@ -39,7 +39,6 @@ export default function QrModal({ shortId, isOpen, onClose }: QrModalProps) {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center" role="dialog" aria-modal="true" aria-labelledby="qr-modal-title">
-            {/* CHANGE: Made background more translucent - reduced opacity to 40% */}
             <div
                 className="absolute inset-0 bg-black/40 transition-opacity"
                 style={{ backgroundColor: 'rgba(0, 0, 0, 0.4)' }}

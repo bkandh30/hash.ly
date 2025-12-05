@@ -59,9 +59,10 @@ const nextConfig: NextConfig = {
     ];
   },
   
-  webpack: (config, { isServer }) => {
-    return config;
-  },
+  // webpack: (config, { isServer }) => {
+  //   return config;
+  // },
+  turbopack: {},
 };
 
 export default withBundleAnalyzer(nextConfig);
